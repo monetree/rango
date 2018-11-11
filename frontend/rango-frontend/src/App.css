@@ -1,0 +1,10 @@
+.poiner {
+  cursor: pointer;
+}
+
+button {
+  border: none;
+  outline:none;
+  margin:10px;
+}
+
