@@ -19,6 +19,7 @@ class SignIn extends React.Component {
     console.log(this.state.password)
   }
 
+
 	
 	onSubmitSignIn = () => {
     fetch('http://127.0.0.1:8000/login/', {
@@ -31,9 +32,19 @@ class SignIn extends React.Component {
     })
     .then(response => response.json())
     .then(res => {
-			console.log(res)
-			window.location = "/";
+			if (res["code"] === 200){
+				sessionStorage.setItem("token", res["token"]);
+				window.location = "/home";
+			}else{
+				console.log(res)
+			}
     })
+	}
+
+	componentDidMount() {
+		if (sessionStorage.getItem("token")){
+			window.location = "/home";
+		} 
 	}
 	
   render() {

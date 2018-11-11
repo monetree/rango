@@ -3,6 +3,33 @@ from django.http import JsonResponse
 from django.contrib.auth.hashers import make_password, check_password
 from .models import Register
 import json
+import redis
+import jwt
+
+R = redis.StrictRedis(host='127.0.0.1', port=6379, db=0)
+
+
+
+def set(request):
+    R.set('foo', 'bar')
+    return JsonResponse({"code":200,"msg":"success"})
+
+def get(request):
+    val = R.get('foo')
+    print(val)
+    return JsonResponse({"code":200,"msg":"success"})
+
+def make_token(request):
+     encoded = jwt.encode({'some': 'payload'}, 'secret', algorithm='HS256')
+     print(encoded)
+     return JsonResponse({"code":200,"msg":"success"})
+
+def decode_token(request):
+    encoded = jwt.encode({'some': 'payload'}, 'secret', algorithm='HS256')
+    data = jwt.decode(encoded, 'secret', algorithms=['HS256'])
+    print(data)
+    return JsonResponse(data)
+
 
 def register(request):
     if request.method == "POST":
@@ -60,8 +87,30 @@ def login(request):
         hash = list(Register.objects.filter(email=email).values('password'))[0]["password"]
         match = check_password(password, hash)
         if match > 0:
-            return JsonResponse({"code":200,"msg":"success"})
+            token = jwt.encode({'email': email}, 'secret', algorithm='HS256')
+            R.rpush('token',token)
+            return JsonResponse({"code":200,"msg":"success","token":token.decode("utf-8")})
         else:
             return JsonResponse({"code":401,"msg":"failed"})
     else:
         return JsonResponse({"code":500,"msg":"bad request"})
+
+def logout(request):
+    R.lrem('token',-1,"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6InNvdWJoYWd5YS5kZXZlbG9wZXJAZ21haWwuY29tIn0.v4d26ojiixt8p2krmk68vMFq9oIHsmYOyTIcbnMBars")
+    return JsonResponse({"code":500,"msg":"bad request"})
+
+def get_user(request):
+    lst_of_tokens = []
+    data     = request.body
+    convert  = data.decode("utf-8")
+    ds       = json.loads(convert)
+    token = ds["token"]
+    auth_tokens = R.lrange("token", 0, -1)
+    print(auth_tokens)
+    lst_of_tokens = [i.decode("utf-8") for i in auth_tokens]
+    if token in lst_of_tokens:
+        data = jwt.decode(token, 'secret', algorithms=['HS256'])
+        username = list(Register.objects.filter(email=data["email"]).values('username'))[0]["username"]
+        return JsonResponse({"code":200,"msg":"success","user":username})
+    else:
+        return JsonResponse({"code":500,"msg":"server error"})
