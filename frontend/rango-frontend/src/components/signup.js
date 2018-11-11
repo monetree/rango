@@ -28,7 +28,7 @@ class SignUp extends React.Component {
     console.log(this.state.password)
   }
 
-  
+
 
   onSubmitSignUp = () => {
     fetch('http://127.0.0.1:8000/register/', {
@@ -47,6 +47,7 @@ class SignUp extends React.Component {
     .then(response => response.json())
     .then(res => {
       console.log(res)
+      window.location = "/signin";
     })
   }
 
@@ -59,7 +60,7 @@ class SignUp extends React.Component {
 					<legend className="f4 fw6 ph0 mh0 tc">Sign In</legend>
           <div className="mt3">
 						<label className="db fw6 lh-copy f6" htmlFor="username">Username</label>
-            <input 
+            <input
               className="br2 pa2 input-reset ba bg-transparent hover-bg-black hover-white w-100"
               type="text"
               name="username"
@@ -69,7 +70,7 @@ class SignUp extends React.Component {
 					</div>
 					<div className="mt3">
 						<label className="db fw6 lh-copy f6" htmlFor="email">Email</label>
-            <input 
+            <input
               className="br2 pa2 input-reset ba bg-transparent hover-bg-black hover-white w-100"
               type="email"
               name="email"
@@ -79,7 +80,7 @@ class SignUp extends React.Component {
 					</div>
 					<div className="mv3">
 						<label className="db fw6 lh-copy f6" htmlFor="password">Password</label>
-            <input 
+            <input
               className="br2 pa2 input-reset ba bg-transparent hover-bg-black hover-white w-100"
               type="password"
               name="password"

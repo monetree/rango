@@ -96,11 +96,17 @@ def login(request):
         return JsonResponse({"code":500,"msg":"bad request"})
 
 def logout(request):
-    R.lrem('token',-1,"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6InNvdWJoYWd5YS5kZXZlbG9wZXJAZ21haWwuY29tIn0.v4d26ojiixt8p2krmk68vMFq9oIHsmYOyTIcbnMBars")
-    return JsonResponse({"code":500,"msg":"bad request"})
-
+    data     = request.body
+    convert  = data.decode("utf-8")
+    ds       = json.loads(convert)
+    token = ds["token"]
+    pop = R.lrem('token',-1,token)
+    if pop:
+        return JsonResponse({"code":200,"msg":"success"})
+    else:
+        return JsonResponse({"code":401,"msg":"failed"})
+        
 def get_user(request):
-    lst_of_tokens = []
     data     = request.body
     convert  = data.decode("utf-8")
     ds       = json.loads(convert)

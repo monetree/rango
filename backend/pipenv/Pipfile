@@ -6,9 +6,11 @@ name = "pypi"
 [dev-packages]
 
 [packages]
-django = "*"
-pyjwt = "*"
-django-cors-headers = "*"
+django-cors-headers = "==2.4.0"
+pytz = "==2018.7"
+Django = "==2.1.3"
+PyJWT = "==1.6.4"
+redis = "*"
 
 [requires]
 python_version = "3.5"
