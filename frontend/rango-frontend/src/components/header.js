@@ -26,7 +26,7 @@ class Header extends React.Component {
 						</Link>
 						</header>
 						<Route path="/signin" component={SignIn}/>
-          	<Route path="/signup" component={SignUp}/>
+          			<Route path="/signup" component={SignUp}/>
 					</div>
 				</Router>
 			</div>

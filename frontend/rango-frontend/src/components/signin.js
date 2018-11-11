@@ -19,8 +19,9 @@ class SignIn extends React.Component {
     console.log(this.state.password)
   }
 
+	
 	onSubmitSignIn = () => {
-    fetch('http://127.0.0.1:3000/login/', {
+    fetch('http://127.0.0.1:8000/login/', {
       method: 'post',
       headers:{'Content-Type': 'application/json'},
       body: JSON.stringify({
@@ -30,7 +31,8 @@ class SignIn extends React.Component {
     })
     .then(response => response.json())
     .then(res => {
-      console.log(res)
+			console.log(res)
+			window.location = "/";
     })
 	}
 	

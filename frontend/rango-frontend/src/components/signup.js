@@ -1,5 +1,7 @@
 import React from 'react';
+import cookie from 'react-cookies';
 
+const csrfToken = cookie.load('csrftoken')
 
 class SignUp extends React.Component {
   constructor(props){
@@ -26,10 +28,16 @@ class SignUp extends React.Component {
     console.log(this.state.password)
   }
 
+  
+
   onSubmitSignUp = () => {
-    fetch('http://127.0.0.1:3000/register/', {
+    fetch('http://127.0.0.1:8000/register/', {
       method: 'post',
-      headers:{'Content-Type': 'application/json'},
+      headers:{
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        'X-CSRFToken': csrfToken
+      },
       body: JSON.stringify({
         username: this.state.username,
         email: this.state.email,
