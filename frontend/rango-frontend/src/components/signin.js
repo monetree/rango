@@ -1,4 +1,5 @@
 import React from 'react';
+import  { Redirect } from 'react-router-dom'
 
 class SignIn extends React.Component {
 	constructor(props){
@@ -43,7 +44,8 @@ class SignIn extends React.Component {
 
 	componentDidMount() {
 		if (sessionStorage.getItem("token")){
-			window.location = "/home";
+			
+			return <Redirect to='/home' />
 		} 
 	}
 	
