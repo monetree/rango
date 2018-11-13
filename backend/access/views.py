@@ -5,10 +5,9 @@ from .models import Register
 import json
 import redis
 import jwt
+from access import utils
 
 R = redis.StrictRedis(host='127.0.0.1', port=6379, db=0)
-
-
 
 def set(request):
     R.set('foo', 'bar')
@@ -64,7 +63,10 @@ def register(request):
                                         password=hash
                                     )
         if obj:
-            return JsonResponse({"code":200,"msg":"success"})
+            token = jwt.encode({'email': email}, 'secret', algorithm='HS256')
+            R.rpush('token',token)
+            mail = utils.send_mail([email],token.decode("utf-8"))
+            return JsonResponse({"code":200,"msg":"success","token":token.decode("utf-8")})
         else:
             return JsonResponse({"code":500,"msg":"Internal server error"})
     else:
@@ -105,7 +107,7 @@ def logout(request):
         return JsonResponse({"code":200,"msg":"success"})
     else:
         return JsonResponse({"code":401,"msg":"failed"})
-        
+
 def get_user(request):
     data     = request.body
     convert  = data.decode("utf-8")
@@ -116,7 +118,30 @@ def get_user(request):
     lst_of_tokens = [i.decode("utf-8") for i in auth_tokens]
     if token in lst_of_tokens:
         data = jwt.decode(token, 'secret', algorithms=['HS256'])
-        username = list(Register.objects.filter(email=data["email"]).values('username'))[0]["username"]
-        return JsonResponse({"code":200,"msg":"success","user":username})
+        email_count = Register.objects.filter(email=data["email"]).count()
+        if email_count < 1:
+            return JsonResponse({"code":500,"msg":"no user exist"})
+        query = list(Register.objects.filter(email=data["email"]).values('username','verified'))[0]
+        username = query["username"]
+        verified = query["verified"]
+        return JsonResponse({"code":200,"msg":"success","user":username,"verified":verified})
     else:
         return JsonResponse({"code":500,"msg":"server error"})
+
+
+def verify_user(request):
+    data     = request.body
+    convert  = data.decode("utf-8")
+    ds       = json.loads(convert)
+    token    = ds["token"]
+    auth_tokens = R.lrange("token", 0, -1)
+    lst_of_tokens = [i.decode("utf-8") for i in auth_tokens]
+    if token in lst_of_tokens:
+        data = jwt.decode(token, 'secret', algorithms=['HS256'])
+        update = Register.objects.filter(email=data["email"]).update(verified=True)
+        if update:
+            return JsonResponse({"code":200,"msg":"verfified"})
+        else:
+            return JsonResponse({"code":500,"msg":"server error"})
+    else:
+        return JsonResponse({"code":401,"msg":"invalid auth token"})

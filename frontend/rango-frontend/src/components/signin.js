@@ -19,7 +19,6 @@ class SignIn extends React.Component {
     console.log(this.state.password)
   }
 
-
 	
 	onSubmitSignIn = () => {
     fetch('http://127.0.0.1:8000/login/', {
@@ -33,8 +32,8 @@ class SignIn extends React.Component {
     .then(response => response.json())
     .then(res => {
 			if (res["code"] === 200){
-				sessionStorage.setItem("token", res["token"]);
-				window.location = "/home";
+				localStorage.setItem("token", res["token"]);
+				window.location = "/";
 			}else{
 				console.log(res)
 			}
@@ -42,7 +41,7 @@ class SignIn extends React.Component {
 	}
 
 	componentDidMount() {
-		if (sessionStorage.getItem("token")){
+		if (localStorage.getItem("token")){
 			window.location = "/home";
 		} 
 	}
@@ -85,8 +84,7 @@ class SignIn extends React.Component {
 						/>
 				</div>
 				<div className="lh-copy mt3">
-					<a href="#0" className="br2 f6 link dim black db">Sign up</a>
-					<a href="#0" className="f6 link dim black db">Forgot your password?</a>
+					<a href="/" className="f6 link dim black db">Forgot your password?</a>
 				</div>
 				</div>
 				</article>

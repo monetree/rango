@@ -4,9 +4,11 @@
   "private": true,
   "dependencies": {
     "react": "^16.6.1",
+    "react-bootstrap-sweetalert": "^4.4.1",
     "react-code-splitting": "^1.2.1",
     "react-cookies": "^0.1.0",
     "react-dom": "^16.6.1",
+    "react-particles-js": "^2.3.0",
     "react-router-dom": "^4.3.1",
     "react-scripts": "2.1.1",
     "tachyons": "^4.11.1"

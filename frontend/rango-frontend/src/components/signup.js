@@ -1,7 +1,4 @@
 import React from 'react';
-import cookie from 'react-cookies';
-
-const csrfToken = cookie.load('csrftoken')
 
 class SignUp extends React.Component {
   constructor(props){
@@ -35,8 +32,7 @@ class SignUp extends React.Component {
       method: 'post',
       headers:{
         'Accept': 'application/json',
-        'Content-Type': 'application/json',
-        'X-CSRFToken': csrfToken
+        'Content-Type': 'application/json'
       },
       body: JSON.stringify({
         username: this.state.username,
@@ -46,8 +42,12 @@ class SignUp extends React.Component {
     })
     .then(response => response.json())
     .then(res => {
-      console.log(res)
-      window.location = "/signin";
+  		if (res["code"] === 200){
+				localStorage.setItem("token", res["token"]);
+				window.location = "/";
+			}else{
+				console.log(res)
+			}
     })
   }
 
@@ -88,19 +88,14 @@ class SignUp extends React.Component {
               onChange={this.onPasswordChange}
             />
 					</div>
-					<label className="pa0 ma0 lh-copy f6 pointer"><input type="checkbox" /> Remember me</label>
 				</fieldset>
 				<div className="">
           <input
-            className="b ph3 pv2 input-reset ba b--black bg-transparent grow pointer f6 dib"
+            className="br2 ph3 pv2 input-reset ba b--black bg-transparent grow pointer f6 dib"
             type="submit"
-            value="Sign in"
+            value="Sign up"
             onClick={this.onSubmitSignUp}
           />
-				</div>
-				<div className="lh-copy mt3">
-					<a href="#0" className="br1 f6 link dim black db">Sign up</a>
-					<a href="#0" className="f6 link dim black db">Forgot your password?</a>
 				</div>
         </div>
 				</article>

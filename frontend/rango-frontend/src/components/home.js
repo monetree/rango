@@ -3,12 +3,6 @@ import React from 'react';
 
 class Home extends React.Component {
 
-	componentDidMount() {
-		if (!sessionStorage.getItem("token")){
-			window.location = "/signin";
-		}
-	}
-
 
     render() {
         return (
