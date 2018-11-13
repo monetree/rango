@@ -21,7 +21,6 @@ class SignIn extends React.Component {
   }
 
 
-	
 	onSubmitSignIn = () => {
     fetch('http://127.0.0.1:8000/login/', {
       method: 'post',
@@ -34,8 +33,8 @@ class SignIn extends React.Component {
     .then(response => response.json())
     .then(res => {
 			if (res["code"] === 200){
-				sessionStorage.setItem("token", res["token"]);
-				window.location = "/home";
+				localStorage.setItem("token", res["token"]);
+				window.location = "/";
 			}else{
 				console.log(res)
 			}
@@ -43,12 +42,11 @@ class SignIn extends React.Component {
 	}
 
 	componentDidMount() {
-		if (sessionStorage.getItem("token")){
-			
-			return <Redirect to='/home' />
-		} 
+		if (localStorage.getItem("token")){
+			window.location = "/home";
+		}
 	}
-	
+
   render() {
     return (
 			<div>
@@ -58,7 +56,7 @@ class SignIn extends React.Component {
 					<legend className="f4 fw6 ph0 mh0 tc">Sign In</legend>
 					<div className="mt3">
 						<label className="db fw6 lh-copy f6" htmlFor="email">Email</label>
-						<input 
+						<input
 							className="br2 pa2 input-reset ba bg-transparent hover-bg-black hover-white w-100"
 							type="email"
 							name="email"
@@ -68,7 +66,7 @@ class SignIn extends React.Component {
 					</div>
 					<div className="mv3">
 						<label className="db fw6 lh-copy f6" htmlFor="password">Password</label>
-						<input 
+						<input
 							className="br2 pa2 input-reset ba bg-transparent hover-bg-black hover-white w-100"
 							type="password"
 							name="password"
@@ -79,7 +77,7 @@ class SignIn extends React.Component {
 					<label className="pa0 ma0 lh-copy f6 pointer"><input type="checkbox" /> Remember me</label>
 				</fieldset>
 				<div className="">
-					<input 
+					<input
 						className="br2 ph3 pv2 input-reset ba b--black bg-transparent grow pointer f6 dib"
 						type="submit"
 						value="Sign in"
@@ -87,8 +85,7 @@ class SignIn extends React.Component {
 						/>
 				</div>
 				<div className="lh-copy mt3">
-					<a href="#0" className="br2 f6 link dim black db">Sign up</a>
-					<a href="#0" className="f6 link dim black db">Forgot your password?</a>
+					<a href="/" className="f6 link dim black db">Forgot your password?</a>
 				</div>
 				</div>
 				</article>

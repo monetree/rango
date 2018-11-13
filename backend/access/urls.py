@@ -3,6 +3,7 @@ from .views import (login, register,
                     set, get,
                     make_token, decode_token,
                     get_user,logout,
+                    verify_user,
                     )
 
 urlpatterns = [
@@ -14,4 +15,5 @@ urlpatterns = [
     path('decode_token/', decode_token),
     path('get_user/', get_user),
     path('logout/', logout),
+    path('verify_user/', verify_user),
 ]
