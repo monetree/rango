@@ -8,7 +8,7 @@ const SignIn = () => <Async load={import('./signin')} />
 const SignUp = () => <Async load={import('./signup')} />
 const Home = () => <Async load={import('./home')} />
 const Alert = () => <Async load={import('./alert')} />
-const Admin = () => <Async load={import('./admin')} />
+const Admin = () => <Async load={import('./admin/admin')} />
 
 class Header extends React.Component {
 	constructor(props){
@@ -29,8 +29,9 @@ class Header extends React.Component {
 		})
 		.then(response => response.json())
 		.then(res => {
-			// this.setState({verified: true})
-			console.log("verified")
+			if (this.state.verified === false){
+				this.setState({verified: true})
+			}			
 		})
 	}
 

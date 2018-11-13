@@ -114,7 +114,6 @@ def get_user(request):
     ds       = json.loads(convert)
     token = ds["token"]
     auth_tokens = R.lrange("token", 0, -1)
-    print(auth_tokens)
     lst_of_tokens = [i.decode("utf-8") for i in auth_tokens]
     if token in lst_of_tokens:
         data = jwt.decode(token, 'secret', algorithms=['HS256'])
