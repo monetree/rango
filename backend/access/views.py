@@ -144,3 +144,32 @@ def verify_user(request):
             return JsonResponse({"code":500,"msg":"server error"})
     else:
         return JsonResponse({"code":401,"msg":"invalid auth token"})
+
+def forgot_password(request):
+    data     = request.body
+    convert  = data.decode("utf-8")
+    ds       = json.loads(convert)
+    email    = ds["email"]
+    obj = Register.objects.filter(email=email).count()
+    if obj < 1:
+        return JsonResponse({"code":403,"msg":"email not found"})
+    token = jwt.encode({'email': email}, 'secret', algorithm='HS256').decode("utf-8")
+    mail = utils.send_mail([email],[token])
+    if mail:
+        return JsonResponse({"code":200,"msg":"verfified","token":token})
+    else:
+        return JsonResponse({"code":500,"msg":"server error"})
+
+def reset_password(request):
+    data     = request.body
+    convert  = data.decode("utf-8")
+    ds       = json.loads(convert)
+    token        = ds["token"]
+    new_password = ds["new_password"]
+    print(new_password)
+    email = jwt.decode(token, 'secret', algorithms=['HS256'])["email"]
+    obj = Register.objects.filter(email=email).update(password=make_password(new_password, salt=None, hasher='default'))
+    if obj:
+        return JsonResponse({"code":200,"msg":"success"})
+    else:
+        return JsonResponse({"code":500,"msg":"server error"})

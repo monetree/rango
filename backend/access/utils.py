@@ -22,16 +22,29 @@ def send_mail(email,token):
 
         plain_txt = "testing the message"
 
-        html_text = """\
-            <!DOCTYPE html>
-            <html lang="en">
-            <body>
-            <pre style="background:#e6e3e3;padding:5px;color:red;font-weight:bold;font-family:monospace;border-radius:5px;">
-            <p><a href="http://localhost:3000/home/?token={}">click here</a> to verify your email</p>
-            </pre>
-            </body>
-            </html>
-        """.format(token)
+        if type(token) == list:
+            token = ''.join(token)
+            html_text = """\
+                <!DOCTYPE html>
+                <html lang="en">
+                <body>
+                <pre style="background:#e6e3e3;padding:5px;color:red;font-weight:bold;font-family:monospace;border-radius:5px;">
+                <p><a href="http://localhost:3000/reset-password/?token={}">click here</a> to reset password</p>
+                </pre>
+                </body>
+                </html>
+            """.format(token)
+        else:
+            html_text = """\
+                <!DOCTYPE html>
+                <html lang="en">
+                <body>
+                <pre style="background:#e6e3e3;padding:5px;color:red;font-weight:bold;font-family:monospace;border-radius:5px;">
+                <p><a href="http://localhost:3000/?token={}">click here</a> to verify your email</p>
+                </pre>
+                </body>
+                </html>
+            """.format(token)
 
         part_1 = MIMEText(plain_txt,'plain')
         part_2 = MIMEText(html_text,"html")
@@ -39,5 +52,6 @@ def send_mail(email,token):
         the_msg.attach(part_2)
         email_conn.sendmail(from_email,to_list,the_msg.as_string())
         email_conn.quit()
+        return True
     except SMTPException:
         print("SMTPException happened")
