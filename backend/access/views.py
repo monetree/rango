@@ -6,8 +6,13 @@ import json
 import redis
 import jwt
 from access import utils
+import os
 
-R = redis.StrictRedis(host='127.0.0.1', port=6379, db=0)
+# redis_url = os.environ['REDIS_URI']
+# R = redis.StrictRedis(redis_url)
+
+R = redis.Redis(host='redis', port=6379, db=0)
+
 
 def set(request):
     R.set('foo', 'bar')

@@ -1,0 +1,32 @@
+version: "3"
+
+services:
+  rango_api:
+    container_name: rango
+    build: ./
+    command: python manage.py runserver 0.0.0.0:8000
+    working_dir: /usr/src/rango_api
+    environment:
+      REDIS_URI: redis://redis:6379
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./:/usr/src/rango_api
+    links:
+      - redis
+      - elasticsearch
+
+
+  #redis
+  redis:
+    image: redis
+    environment:
+      - ALLOW_EMPTY_PASSWORD=yes
+    ports:
+      - "6379:6379"
+
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:6.5.0
+    ports:
+      - "9200:9200"
+      - "9300:9300"
