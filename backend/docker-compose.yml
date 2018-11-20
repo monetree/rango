@@ -4,10 +4,12 @@ services:
   rango_api:
     container_name: rango
     build: ./
-    command: python manage.py runserver 0.0.0.0:8000
+    # command: python manage.py runserver 0.0.0.0:8000
+    command: "bash -c 'python manage.py migrate --no-input && python manage.py runserver 0.0.0.0:8000'"
     working_dir: /usr/src/rango_api
     environment:
       REDIS_URI: redis://redis:6379
+      MONGO_URI: mongodb://rango:27017
     ports:
       - "8000:8000"
     volumes:
@@ -15,6 +17,7 @@ services:
     links:
       - redis
       - elasticsearch
+      - mongo
 
 
   #redis
@@ -30,3 +33,8 @@ services:
     ports:
       - "9200:9200"
       - "9300:9300"
+
+  mongo:
+    image: mongo
+    ports:
+      - "27017:27017"
