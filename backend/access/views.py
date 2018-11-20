@@ -9,9 +9,9 @@ from access import utils
 import os
 
 # redis_url = os.environ['REDIS_URI']
-# R = redis.StrictRedis(redis_url)
 
-R = redis.Redis(host='redis', port=6379, db=0)
+# R = redis.StrictRedis(host='localhost', port=6379, db=0)
+R = redis.StrictRedis(host='redis', port=6379, db=0)
 
 
 def set(request):

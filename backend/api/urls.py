@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import post_profile, get_profile, delete_profile, search
+from .views import post_profile, get_profile, delete_profile #search
 
 urlpatterns = [
     path('post_profile/', post_profile),
