@@ -6,7 +6,7 @@ def send_mail(email,token):
     host = "smtp.gmail.com"
     port = 587
     username = "soubhagya.developer@gmail.com"
-    password = "Thinkonce@619"
+    password = "Thinkonce@000"
     from_email= username
     to_list = email
 

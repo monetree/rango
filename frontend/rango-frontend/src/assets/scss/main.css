@@ -44,3 +44,29 @@ button {
 .q {
   border: 2px solid #9eebcf;
   outline: none; }
+  .pagination {
+    display: inline-block;
+  }
+  
+  .pagination {
+    display: inline-block;
+    cursor: pointer;
+  }
+  
+  .pagination h2 {
+    color: black;
+    float: left;
+    padding: 8px 16px;
+    text-decoration: none;
+  }
+  
+  .pagination h2.active {
+    background-color: #4CAF50;
+    color: white;
+    border-radius: 5px;
+  }
+  
+  .pagination h2:hover:not(.active) {
+    background-color: #ddd;
+    border-radius: 5px;
+  }

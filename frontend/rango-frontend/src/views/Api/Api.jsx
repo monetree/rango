@@ -11,7 +11,9 @@ class Api extends React.Component {
             title : '',
             content: '',
             img: '',
-            data: []
+            data: [],
+            pages: 0,
+            page:0
 
         }
     }
@@ -48,9 +50,13 @@ class Api extends React.Component {
 
 
     componentDidMount() {
-        fetch('http://127.0.0.1:8000/get_profile/')
+        fetch(`http://127.0.0.1:8000/get_profile/?page=${this.state.page}`)
           .then(response => response.json())
-          .then(res => this.setState({ data: res }));  
+          .then(res =>{
+            this.setState({ data: res });  
+            this.setState({ pages: res[res.length-1].pages });
+            console.log(this.state.page)   
+        });
       }
     
 
@@ -164,7 +170,11 @@ class Api extends React.Component {
                     </Modal>
                 </section>
 
-               <ProfileCard data={this.state.data} />
+               <ProfileCard 
+                data={this.state.data}
+                pages={this.state.pages}
+                page={this.state.page}
+                />
             </div>
         )
     }

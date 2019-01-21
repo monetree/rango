@@ -26,6 +26,11 @@ class ProfileCard extends React.Component {
     })
   } 
 
+  demoMethod(page){
+    this.props.page(page)
+    console.log(page)
+  }
+
   render(){
   return (
     <div>
@@ -51,6 +56,15 @@ class ProfileCard extends React.Component {
         );
       })
     }
+
+      <div className="pagination">
+        <center>
+            {[...Array(this.props.pages+1)].map((x, i) =>
+              <h2 key={i} onClick={()=>this.demoMethod(i+1)} className="tc">{ i+1 }</h2>
+            )}
+        </center>
+      </div>
+
     </div>
   );
   }
